@@ -50,7 +50,8 @@ import { Application, Assets, Sprite } from "pixi.js";
     // Rotate to face mouse
     const dx = mouseX - bunny.position.x;
     const dy = mouseY - bunny.position.y;
-    bunny.rotation = Math.atan2(dy, dx);
+  // Adjust rotation so that 0 radians is facing down
+  bunny.rotation = Math.atan2(dy, dx) - Math.PI / 2;
 
     // Move towards target position
     const moveDx = targetX - bunny.position.x;

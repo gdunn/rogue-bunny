@@ -1,6 +1,6 @@
 
-[] Create artwork for the rabbit (top down view)
-[] Create artwork for the carrot (top down view)
+[x] Create artwork for the rabbit (top down view)
+[x] Create artwork for the carrot (top down view)
 [] Draw walls?
 [] Create a simple map with walls and carrots
 [] Implement the rabbit movement
