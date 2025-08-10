@@ -25,9 +25,18 @@ import { Application, Assets, Sprite } from "pixi.js";
   // Add the bunny to the stage
   app.stage.addChild(bunny);
 
-  // Track mouse position
+  // Track mouse position and target position for movement
   let mouseX = app.screen.width / 2;
   let mouseY = app.screen.height / 2;
+  let targetX = bunny.position.x;
+  let targetY = bunny.position.y;
+
+  // Listen for click events to set target position
+  app.canvas.addEventListener("click", (event) => {
+    const rect = app.canvas.getBoundingClientRect();
+    targetX = event.clientX - rect.left;
+    targetY = event.clientY - rect.top;
+  });
 
   // Listen for mouse move events
   window.addEventListener("mousemove", (event) => {
@@ -36,10 +45,24 @@ import { Application, Assets, Sprite } from "pixi.js";
     mouseY = event.clientY - rect.top;
   });
 
-  // Update bunny rotation to face the mouse pointer
+  // Update bunny rotation to face the mouse pointer and move towards target
   app.ticker.add(() => {
+    // Rotate to face mouse
     const dx = mouseX - bunny.position.x;
     const dy = mouseY - bunny.position.y;
     bunny.rotation = Math.atan2(dy, dx);
+
+    // Move towards target position
+    const moveDx = targetX - bunny.position.x;
+    const moveDy = targetY - bunny.position.y;
+    const distance = Math.sqrt(moveDx * moveDx + moveDy * moveDy);
+    const speed = 3; // pixels per frame
+    if (distance > speed) {
+      bunny.position.x += (moveDx / distance) * speed;
+      bunny.position.y += (moveDy / distance) * speed;
+    } else if (distance > 0) {
+      bunny.position.x = targetX;
+      bunny.position.y = targetY;
+    }
   });
 })();
