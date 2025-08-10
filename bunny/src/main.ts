@@ -10,7 +10,6 @@ import { Application, Assets, Sprite, Text } from "pixi.js";
   // Append the application canvas to the document body
   document.getElementById("pixi-container")!.appendChild(app.canvas);
 
-
   // Load the bunny and carrot textures
   const bunnyTexture = await Assets.load("/assets/bunny.png");
   const carrotTexture = await Assets.load("/assets/carrot.png");
@@ -47,7 +46,7 @@ import { Application, Assets, Sprite, Text } from "pixi.js";
     fontFamily: "Arial",
     fontSize: 32,
     fill: 0xffffff,
-    align: "right"
+    align: "right",
   });
   scoreText.anchor.set(1, 0); // right top
   scoreText.position.set(app.screen.width - 20, 20);
