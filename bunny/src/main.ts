@@ -1,4 +1,4 @@
-import { Application, Assets, Sprite } from "pixi.js";
+import { Application, Assets, Sprite, Text } from "pixi.js";
 
 (async () => {
   // Create a new application
@@ -18,12 +18,18 @@ import { Application, Assets, Sprite } from "pixi.js";
   // Create a bunny Sprite
   const bunny = new Sprite(bunnyTexture);
 
+  // Helper to place carrot at a random position
+  function placeCarrotRandomly(sprite: Sprite) {
+    const margin = 30;
+    const randX = margin + Math.random() * (app.screen.width - 2 * margin);
+    const randY = margin + Math.random() * (app.screen.height - 2 * margin);
+    sprite.position.set(randX, randY);
+  }
+
   // Create a carrot Sprite at a random position
   const carrot = new Sprite(carrotTexture);
   carrot.anchor.set(0.5);
-  const randX = Math.random() * app.screen.width;
-  const randY = Math.random() * app.screen.height;
-  carrot.position.set(randX, randY);
+  placeCarrotRandomly(carrot);
 
   // Center the sprite's anchor point
   bunny.anchor.set(0.5);
@@ -34,6 +40,18 @@ import { Application, Assets, Sprite } from "pixi.js";
   // Add the carrot and bunny to the stage
   app.stage.addChild(carrot);
   app.stage.addChild(bunny);
+
+  // Scoreboard setup
+  let score = 0;
+  const scoreText = new Text(`Score: ${score}`, {
+    fontFamily: "Arial",
+    fontSize: 32,
+    fill: 0xffffff,
+    align: "right"
+  });
+  scoreText.anchor.set(1, 0); // right top
+  scoreText.position.set(app.screen.width - 20, 20);
+  app.stage.addChild(scoreText);
 
   // Track mouse position and target position for movement
   let mouseX = app.screen.width / 2;
@@ -55,13 +73,13 @@ import { Application, Assets, Sprite } from "pixi.js";
     mouseY = event.clientY - rect.top;
   });
 
-  // Update bunny rotation to face the mouse pointer and move towards target
+  // Update bunny rotation, movement, collision, and scoreboard
   app.ticker.add(() => {
     // Rotate to face mouse
     const dx = mouseX - bunny.position.x;
     const dy = mouseY - bunny.position.y;
-  // Adjust rotation so that 0 radians is facing down
-  bunny.rotation = Math.atan2(dy, dx) - Math.PI / 2;
+    // Adjust rotation so that 0 radians is facing down
+    bunny.rotation = Math.atan2(dy, dx) - Math.PI / 2;
 
     // Move towards target position
     const moveDx = targetX - bunny.position.x;
@@ -75,5 +93,20 @@ import { Application, Assets, Sprite } from "pixi.js";
       bunny.position.x = targetX;
       bunny.position.y = targetY;
     }
+
+    // Collision detection (circle-based)
+    const collisionDist = bunny.width * 0.4 + carrot.width * 0.4;
+    const carrotDx = carrot.position.x - bunny.position.x;
+    const carrotDy = carrot.position.y - bunny.position.y;
+    const carrotDist = Math.sqrt(carrotDx * carrotDx + carrotDy * carrotDy);
+    if (carrotDist < collisionDist) {
+      // Bunny collects carrot
+      score++;
+      scoreText.text = `Score: ${score}`;
+      placeCarrotRandomly(carrot);
+    }
+
+    // Keep scoreboard in top right if window resizes
+    scoreText.position.set(app.screen.width - 20, 20);
   });
 })();
