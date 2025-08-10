@@ -25,11 +25,21 @@ import { Application, Assets, Sprite } from "pixi.js";
   // Add the bunny to the stage
   app.stage.addChild(bunny);
 
-  // Listen for animate update
-  app.ticker.add((time) => {
-    // Just for fun, let's rotate mr rabbit a little.
-    // * Delta is 1 if running at 100% performance *
-    // * Creates frame-independent transformation *
-    bunny.rotation += 0.02 * time.deltaTime;
+  // Track mouse position
+  let mouseX = app.screen.width / 2;
+  let mouseY = app.screen.height / 2;
+
+  // Listen for mouse move events
+  window.addEventListener("mousemove", (event) => {
+    const rect = app.canvas.getBoundingClientRect();
+    mouseX = event.clientX - rect.left;
+    mouseY = event.clientY - rect.top;
+  });
+
+  // Update bunny rotation to face the mouse pointer
+  app.ticker.add(() => {
+    const dx = mouseX - bunny.position.x;
+    const dy = mouseY - bunny.position.y;
+    bunny.rotation = Math.atan2(dy, dx);
   });
 })();
