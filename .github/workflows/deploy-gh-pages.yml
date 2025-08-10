@@ -37,8 +37,3 @@ jobs:
           publish_dir: ./bunny/dist
           publish_branch: gh-pages
           force_orphan: true
-
-      - name: Add deployment URL to summary
-        run: |
-          echo "### 🚀 Deployed to: https://gdunn.github.io/rogue-bunny/" >> $GITHUB_STEP_SUMMARY
-        shell: bash
