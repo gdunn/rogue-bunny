@@ -10,11 +10,20 @@ import { Application, Assets, Sprite } from "pixi.js";
   // Append the application canvas to the document body
   document.getElementById("pixi-container")!.appendChild(app.canvas);
 
-  // Load the bunny texture
-  const texture = await Assets.load("/assets/bunny.png");
+
+  // Load the bunny and carrot textures
+  const bunnyTexture = await Assets.load("/assets/bunny.png");
+  const carrotTexture = await Assets.load("/assets/carrot.png");
 
   // Create a bunny Sprite
-  const bunny = new Sprite(texture);
+  const bunny = new Sprite(bunnyTexture);
+
+  // Create a carrot Sprite at a random position
+  const carrot = new Sprite(carrotTexture);
+  carrot.anchor.set(0.5);
+  const randX = Math.random() * app.screen.width;
+  const randY = Math.random() * app.screen.height;
+  carrot.position.set(randX, randY);
 
   // Center the sprite's anchor point
   bunny.anchor.set(0.5);
@@ -22,7 +31,8 @@ import { Application, Assets, Sprite } from "pixi.js";
   // Move the sprite to the center of the screen
   bunny.position.set(app.screen.width / 2, app.screen.height / 2);
 
-  // Add the bunny to the stage
+  // Add the carrot and bunny to the stage
+  app.stage.addChild(carrot);
   app.stage.addChild(bunny);
 
   // Track mouse position and target position for movement
