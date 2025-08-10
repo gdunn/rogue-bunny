@@ -11,8 +11,8 @@ import { Application, Assets, Sprite, Text } from "pixi.js";
   document.getElementById("pixi-container")!.appendChild(app.canvas);
 
   // Load the bunny and carrot textures
-  const bunnyTexture = await Assets.load("/assets/bunny.png");
-  const carrotTexture = await Assets.load("/assets/carrot.png");
+  const bunnyTexture = await Assets.load("assets/bunny.png");
+  const carrotTexture = await Assets.load("assets/carrot.png");
 
   // Create a bunny Sprite
   const bunny = new Sprite(bunnyTexture);
